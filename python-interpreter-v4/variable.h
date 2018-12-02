@@ -26,7 +26,7 @@ public:
 	~Variable();
 
 	//mutators for variable name
-	void set_variable_name(string name) { variable_name = name; }
+	void set_variable_name(char* name) { variable_name = name; }
 	string get_variable_name() { return variable_name; }
 
 	//mutators for storage number

@@ -21,54 +21,82 @@ extern char* yytext;
 
 int main() {
 
-	Variable var1("Charles", 123, 321);
+	int token; //gets the symbol number of token
 
-	cout << var1.get_variable_name() << endl;
+	int storage_id = 0; 
 
-	// int token; //gets the symbol number of token
+	vector<Variable> vars;
 
-	// token = yylex(); //initializes the token search
+	token = yylex(); //initializes the token search
 
-	// //while grabbing tokens determine what needs to be done
-	// while(token) {
-	// 	// switch case determining what we need to do
-	// 	// break up in to different header files and methods
+	//while grabbing tokens determine what needs to be done
+	while(token) {
+		// switch case determining what we need to do
+		// break up in to different header files and methods
 
-	// 	switch(token) {
-	// 		case 1:
-	// 			//when we have a print statement we need to
-	// 			//keep grabbing the next tokens and passing it
-	// 			//to the print function to create a string
+		switch(token) {
+			case 1:
+				//when we have a print statement we need to
+				//keep grabbing the next tokens and passing it
+				//to the print function to create a string
 
-	// 			token = yylex(); //next token after print
+				token = yylex(); //next token after print
 
-	// 			while(token) {
-	// 				if(token == 12) break;
-	// 				else if(token == 11) {
-	// 					//check the variable after the comma
-	// 					//and print out the value assigned to it
-	// 					token = yylex();
-	// 				}
-	// 				else {
-	// 					//print out anything thats an
-	// 					cout << yytext << " ";
-	// 					token = yylex();
-	// 				}
-	// 			}
-	// 			cout << endl;
+				while(token) {
+					if(token == 12) break;
+					else if(token == 11) {
+						//check the variable after the comma
+						//and print out the value assigned to it
 
-	// 			break;
-	// 		case 9:
-	// 			cout << "Variable Declared [" << yytext << "]" << "\tStored to location [" << yylineno << "]" << endl;
-	// 			break;
-	// 		default:
-	// 			break;
-	// 	}
+						token = yylex(); //gets the variable token
+
+						for(int i = 0; i < vars.size(); i++) {
+							if(vars[i].get_variable_name() == yytext) {
+								cout << vars[i].get_value() << endl;
+								break;
+							}
+						}
+					}
+					else if(token == 9) {
+
+						for(int i = 0; i < vars.size(); i++) {
+							if(vars[i].get_variable_name() == yytext) {
+								cout << vars[i].get_value() << endl;
+								break;
+							}
+						}
+
+						token = yylex();
+					}
+					else {
+						//print out anything thats in the string
+						cout << yytext << " ";
+						
+						token = yylex();
+					}
+				}
+				cout << endl;
+
+				break;
+			case 9: {
+				//creates a new variable for every assignment
+				//stores it into a vector of variables for
+				//easier access and search
+				Variable *newVar = new Variable;
+				newVar->set_variable_name(yytext);
+				newVar->set_storage_location_number(storage_id); storage_id++;
+				token = yylex(); token = yylex();
+				newVar->set_value(stoi(yytext));
+				vars.push_back(*newVar);
+
+				break;
+			}
+			default:
+				break;
+		}
 		
-	// 	token = yylex(); //continue to get next token
-	// }
-
-	// cout << endl;
+		token = yylex(); //continue to get next token
+	}
 
 	return 0;
 }

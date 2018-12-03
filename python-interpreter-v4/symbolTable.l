@@ -21,7 +21,9 @@
 [a-zA-Z][_a-zA-Z0-9\!]*	return IDENTIFIER;
 [\n]					return EOL;
 #						return COMMENT;
-[\s]					return 14;
+"   if"					return NESTEDIFLVL1;
+"   \tif"				return NESTEDIFLVL2;
+[ \s]					return BLANK;
 .						;
 %%
 

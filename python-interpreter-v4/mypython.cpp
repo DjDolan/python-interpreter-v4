@@ -38,7 +38,6 @@ int main() {
 				//when we have a print statement we need to
 				//keep grabbing the next tokens and passing it
 				//to the print function to create a string
-				blank_counter = 0; //resets blank counter
 
 				token = yylex(); //next token after print
 
@@ -79,8 +78,6 @@ int main() {
 				break;
 			//COMMENT
 			case 12:
-				blank_counter = 0; //resets blank counter
-				
 				//if is a comment skip entire line
 				token = yylex();
 					
@@ -93,10 +90,7 @@ int main() {
 				break;
 			//IF STATEMENT - ELSE STATEMENT
 			case 3: {
-					blank_counter = 0; //resets blank counter
-
-					cout << yytext;
-
+					//if statement
 					while(token) {
 						if(token == 13) break; //EOL
 						else if(token == 5) cout << yytext;
@@ -111,6 +105,12 @@ int main() {
 				}
 				break;
 			//DEFINE FUNCTION
+			case 14:
+				cout << "nested if level 1 " << endl;
+				break;
+			case 15:
+				cout << "nested if level 2 " << endl;
+				break;
 			//IDENTIFIER
 			case 9: {
 				//creates a new variable for every assignment
@@ -118,43 +118,34 @@ int main() {
 				//easier access and search
 				//needs to check for arithmetic expressions
 
-				blank_counter = 0; //resets blank counter
-
 				Variable *newVar = new Variable;
 				newVar->set_variable_name(yytext);
 				newVar->set_storage_location_number(storage_id); storage_id++;
+				
 				while(token) {
-					token = yylex();
 					if(token == 10) {
-
+						//cout << "Adding [" << yytext << "]" << endl;
+						newVar->set_value(yytext);
+						break;
 					}
+
+					token = yylex();
 				}
-				newVar->set_value(yytext);
+
 				vars.push_back(*newVar);
 
 				break;
 			}
-			//BLANK
-			case 14:
-				blank_counter++; token = yylex();
-				cout << blank_counter << " " << yytext << endl;
-
-				if(blank_counter == 3) cout << "We have a nested if statement level 1!" << endl;
-
-				break;
 			//ERROR CHECKING
 			default:
-				blank_counter = 0;
 				break;
 		}
 		
 		token = yylex(); //continue to get next token
 	}
 
-	//cout << blank_counter << endl;
-
 	// for(int i = 0; i < vars.size(); i++) {
-	// 	cout << vars[i].get_variable_name() << " ";
+	// 	cout << vars[i].get_variable_name() << " : ";
 	// 	cout << vars[i].get_value() << endl;
 	// }
 

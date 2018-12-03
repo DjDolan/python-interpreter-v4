@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "variable.h"
+#include "ifstatements.h"
 
 using namespace std;
 
@@ -22,7 +23,8 @@ extern char* yytext;
 int main() {
 
 	int token; //gets the symbol number of token
-	int blank_counter = 0;
+	int if_counter = -1;
+	int else_counter = -1;
 	int storage_id = 0;
 
 	vector<Variable> vars;
@@ -31,7 +33,7 @@ int main() {
 
 	//while grabbing tokens determine what needs to be done
 	while(token) {
-		//switch case determining what we need to do
+		// switch case determining what we need to do
 		switch(token) {
 			//PRINT
 			case 1:
@@ -90,27 +92,46 @@ int main() {
 				break;
 			//IF STATEMENT - ELSE STATEMENT
 			case 3: {
-					//if statement
-					while(token) {
-						if(token == 13) break; //EOL
-						else if(token == 5) cout << yytext;
-						else if(token == 6) cout << yytext;
-						else if(token == 9) cout << yytext;
-						else if(token == 10) cout << yytext;
-						else cout << yytext;
+				vector<string> if_block;
+				string line;
 
-						token = yylex();
+				//get initial conditon
+				while(token) {
+					if(token == 13) {
+						if_block.push_back(line);
+						line = "";
+						break;
 					}
-					cout << endl;
+					line += yytext;
+					token = yylex();
 				}
-				break;
+				token = yylex();
+				//get the rest of the block
+				while(token) {
+					//when the instruction is nested then add to line
+					if(token == 15) {
+						while(token) {
+							if(token == 13) {
+								if_block.push_back(line);
+								line = "";
+								break;
+							}
+							line += yytext;
+							token = yylex();
+						}
+					}
+					else break;
+
+					token = yylex();
+				}
+
+				for(int i = 0; i < if_block.size(); i++) {
+					cout << if_block[i] << endl;
+				}
+			}
+			break;
 			//DEFINE FUNCTION
-			case 14:
-				cout << "nested if level 1 " << endl;
-				break;
-			case 15:
-				cout << "nested if level 2 " << endl;
-				break;
+
 			//IDENTIFIER
 			case 9: {
 				//creates a new variable for every assignment
@@ -124,7 +145,6 @@ int main() {
 				
 				while(token) {
 					if(token == 10) {
-						//cout << "Adding [" << yytext << "]" << endl;
 						newVar->set_value(yytext);
 						break;
 					}
@@ -144,10 +164,10 @@ int main() {
 		token = yylex(); //continue to get next token
 	}
 
-	// for(int i = 0; i < vars.size(); i++) {
-	// 	cout << vars[i].get_variable_name() << " : ";
-	// 	cout << vars[i].get_value() << endl;
-	// }
+	for(int i = 0; i < vars.size(); i++) {
+		cout << vars[i].get_variable_name() << " : ";
+		cout << vars[i].get_value() << endl;
+	}
 
 	return 0;
 }

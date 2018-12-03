@@ -19,12 +19,10 @@
 :						return COLON;
 [1-9][0-9]*				return INTEGER;
 [a-zA-Z][_a-zA-Z0-9\!]*	return IDENTIFIER;
-[\n]					return EOL;
+[\0\n]					return EOL;
 #						return COMMENT;
-"   if"					return NESTEDIFLVL1;
-"   \tif"				return NESTEDIFLVL2;
-[ \s]					return BLANK;
-.						;
+.						return ALL;
+\t*[a-zA-Z][_a-zA-Z0-9\!]* return NESTED;
 %%
 
 int yywrap(void) {

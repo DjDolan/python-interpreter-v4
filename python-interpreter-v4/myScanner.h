@@ -11,6 +11,5 @@
 #define COMMA 11
 #define COMMENT 12
 #define EOL 13
-#define NESTEDIFLVL1 14
-#define NESTEDIFLVL2 15
-#define BLANK 16
+#define ALL 14
+#define NESTED 15

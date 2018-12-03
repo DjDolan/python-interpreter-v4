@@ -6,17 +6,17 @@ class Variable {
 private:
 	string variable_name; //name of the variable 
 	int storage_location_number; //position of where the information is stored (value ID)
-	int value_stored; //the value stored for this variable
+	string value_stored; //the value stored for this variable
 public:
 	//constructor
 	Variable() {
 		variable_name = "name";
 		storage_location_number = 9999;
-		value_stored = 0;
+		value_stored = "0";
 	}
 
 	//overloaded constructor
-	Variable(string name, int id, int val) {
+	Variable(string name, int id, string val) {
 		variable_name = name;
 		storage_location_number = id;
 		value_stored = val;
@@ -34,12 +34,12 @@ public:
 	int get_storage_location_number() { return storage_location_number; }
 
 	//mutators for value
-	void set_value(int val) { value_stored = val; }
-	int get_value() { return value_stored; }
+	void set_value(char* val) { value_stored = val; }
+	string get_value() { return value_stored; }
 };
 
 Variable::~Variable() {
 	variable_name = "N/A";
 	storage_location_number = 9999;
-	value_stored = 0;
+	value_stored = "0";
 }

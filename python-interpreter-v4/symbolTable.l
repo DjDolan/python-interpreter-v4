@@ -20,6 +20,8 @@
 [1-9][0-9]*				return INTEGER;
 [a-zA-Z][_a-zA-Z0-9\!]*	return IDENTIFIER;
 [\n]					return EOL;
+#						return COMMENT;
+[\s]					return 14;
 .						;
 %%
 

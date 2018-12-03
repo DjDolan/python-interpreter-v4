@@ -9,4 +9,5 @@
 #define IDENTIFIER 9
 #define INTEGER 10
 #define COMMA 11
-#define EOL 12
+#define COMMENT 12
+#define EOL 13
